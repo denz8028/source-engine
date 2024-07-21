@@ -47,7 +47,7 @@ public:
 
 	void		AddViewKick( void );
 	float		GetDamageForActivity( Activity hitActivity );
-
+	virtual	bool	Deploy();
 	virtual int WeaponMeleeAttack1Condition( float flDot, float flDist );
 	void   SecondaryAttack( void );
 
@@ -216,6 +216,7 @@ void CWeaponFlashlight::HandleAnimEventMeleeHit( animevent_t *pEvent, CBaseComba
 
 void CWeaponFlashlight::SecondaryAttack ( void ) {
 	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
+	SendWeaponAnim(ACT_VM_RELOAD);
 	if ( pPlayer->FlashlightIsOn() )
 	{
 		pPlayer->FlashlightTurnOff();
@@ -224,7 +225,7 @@ void CWeaponFlashlight::SecondaryAttack ( void ) {
 	{
 		pPlayer->FlashlightTurnOn();
 	}
-	m_flNextSecondaryAttack = gpGlobals->curtime + 0.75;
+	m_flNextSecondaryAttack = gpGlobals->curtime + 0.25;
 }
 
 //-----------------------------------------------------------------------------
@@ -251,4 +252,14 @@ void CWeaponFlashlight::Operator_HandleAnimEvent( animevent_t *pEvent, CBaseComb
 			}
 			break;
 	}
+}
+bool CWeaponFlashlight::Deploy()
+{
+	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
+	SendWeaponAnim(ACT_VM_RELOAD);
+	if ( !pPlayer->FlashlightIsOn() )
+	{
+		pPlayer->FlashlightTurnOn();
+	}
+	return BaseClass::Deploy();
 }

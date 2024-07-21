@@ -288,6 +288,7 @@ $Project "Server (Episodic)"
 
 			$Folder	"unused"
 			{
+				$File	"hl2\weapon_flashlight.cpp"
 				$File	"hl2\grenade_beam.cpp"
 				$File	"hl2\grenade_beam.h"
 				$File	"hl2\grenade_homer.cpp"

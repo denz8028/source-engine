@@ -51,6 +51,8 @@ static ConVar r_flashlightladderdist( "r_flashlightladderdist", "40.0", FCVAR_CH
 static ConVar mat_slopescaledepthbias_shadowmap( "mat_slopescaledepthbias_shadowmap", "16", FCVAR_CHEAT );
 static ConVar mat_depthbias_shadowmap(	"mat_depthbias_shadowmap", "0.0005", FCVAR_CHEAT  );
 
+ConVar r_flashlightlag("r_flashlightlag", "1", 0);
+ConVar r_flashlightlag_amount("r_flashlightlag_amount", "0.01", 0);
 
 void r_newflashlightCallback_f( IConVar *pConVar, const char *pOldString, float flOldValue )
 {
@@ -86,6 +88,8 @@ CFlashlightEffect::CFlashlightEffect(int nEntIndex)
 	{
 		m_FlashlightTexture.Init( "effects/flashlight001", TEXTURE_GROUP_OTHER, true );
 	}
+
+	m_hasPrevOrientation = false;
 }
 
 
@@ -115,6 +119,7 @@ void CFlashlightEffect::TurnOff()
 {
 	if (m_bIsOn)
 	{
+		m_hasPrevOrientation = false;
 		m_bIsOn = false;
 		LightOff();
 	}
@@ -337,6 +342,8 @@ void CFlashlightEffect::UpdateLightNew(const Vector &vecPos, const Vector &vecFo
 	state.m_flShadowSlopeScaleDepthBias = mat_slopescaledepthbias_shadowmap.GetFloat();
 	state.m_flShadowDepthBias = mat_depthbias_shadowmap.GetFloat();
 
+	if(r_flashlightlag.GetBool() && !engine->IsPaused())
+		HandleFlashlightLag(state);
 	if( m_FlashlightHandle == CLIENTSHADOW_INVALID_HANDLE )
 	{
 		m_FlashlightHandle = g_pClientShadowMgr->CreateFlashlight( state );
@@ -481,6 +488,18 @@ void CFlashlightEffect::LightOff()
 {	
 	LightOffOld();
 	LightOffNew();
+}
+void CFlashlightEffect::HandleFlashlightLag(FlashlightState_t& state)
+{
+	if(m_hasPrevOrientation)
+	{
+		QuaternionSlerp(m_quatPrevOrientation, state.m_quatOrientation, r_flashlightlag_amount.GetFloat(), state.m_quatOrientation);
+	}
+	else
+	{
+		m_hasPrevOrientation = true;
+	}
+	m_quatPrevOrientation = state.m_quatOrientation;
 }
 
 CHeadlightEffect::CHeadlightEffect() 

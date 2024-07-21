@@ -1216,12 +1216,24 @@ void C_BasePlayer::UpdateFlashlight()
 
 			m_pFlashlight->TurnOn();
 		}
-
 		Vector vecForward, vecRight, vecUp;
-		EyeVectors( &vecForward, &vecRight, &vecUp );
+		CBaseViewModel* vm = GetViewModel();
+		if (!vm)
+		{
+			EyeVectors( &vecForward, &vecRight, &vecUp );
 
-		// Update the light with the new position and direction.		
-		m_pFlashlight->UpdateLight( EyePosition(), vecForward, vecRight, vecUp, FLASHLIGHT_DISTANCE );
+			// Update the light with the new position and direction.
+			m_pFlashlight->UpdateLight( EyePosition(), vecForward, vecRight, vecUp, FLASHLIGHT_DISTANCE );
+		}
+		else
+		{
+			Vector vecOrigin;
+			QAngle angles;
+			int attachment = vm->LookupAttachment("light");
+			vm->GetAttachment(attachment,vecOrigin, angles );
+			AngleVectors(angles, &vecForward, &vecRight, &vecUp);
+			m_pFlashlight->UpdateLight(vecOrigin, vecForward, vecRight, vecUp, FLASHLIGHT_DISTANCE );
+		}
 	}
 	else if (m_pFlashlight)
 	{
