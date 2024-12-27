@@ -261,6 +261,7 @@ public:
 	static CBasePlayer		*CreatePlayer( const char *className, edict_t *ed );
 
 	virtual void			CreateViewModel( int viewmodelindex = 0 );
+	virtual void	        CreateHandModel( int viewmodelindex = 1, int iOtherVm = 0 );
 	CBaseViewModel			*GetViewModel( int viewmodelindex = 0, bool bObserverOK = true );
 	void					HideViewModels( void );
 	void					DestroyViewModels( void );
@@ -437,6 +438,7 @@ public:
 	virtual void			SetFlashlightEnabled( bool bState ) { };
 	virtual int				FlashlightIsOn( void ) { return false; }
 	virtual void			FlashlightTurnOn( void ) { };
+	virtual void			FlashlightTurnOnCust( void ) {	};
 	virtual void			FlashlightTurnOff( void ) { };
 	virtual bool			IsIlluminatedByFlashlight( CBaseEntity *pEntity, float *flReturnDot ) {return false; }
 	

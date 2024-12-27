@@ -111,6 +111,7 @@ $Project "Client (HL2)"
 			$File	"hl2\shieldproxy.cpp"
 			$File	"hl2\vgui_rootpanel_hl2.cpp"
 			$File 	"episodic\c_vort_charge_token.cpp"
+			$File	"..\shared\handviewmodel_shared.cpp"
 		}
 	}
 }

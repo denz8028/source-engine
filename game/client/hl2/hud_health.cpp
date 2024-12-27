@@ -54,8 +54,29 @@ public:
 private:
 	// old variables
 	int		m_iHealth;
-	
+
 	int		m_bitsDamage;
+    CPanelAnimationVarAliasType( float, legacy_xpos, "legacy_xpos", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, legacy_ypos, "legacy_ypos", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, legacy_wide, "legacy_wide", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, legacy_tall, "legacy_tall", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, simple_xpos, "simple_xpos", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, simple_ypos, "simple_ypos", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, simple_wide, "simple_wide", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, simple_tall, "simple_tall", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, progress_xpos, "progress_xpos", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, progress_ypos, "progress_ypos", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, progress_wide, "progress_wide", "0", "proportional_float" );
+    CPanelAnimationVarAliasType( float, progress_tall, "progress_tall", "0", "proportional_float" );
+    CPanelAnimationVar( Color, m_ProgressFgColor, "ProgressFgColor", "FgColor" );
+    CPanelAnimationVar( Color, m_ProgressBgColor, "ProgressBgColor", "BgColor" );
+
+    int m_iStyle;
+    int m_iOriginalXPos;
+    int m_iOriginalYPos;
+    int m_iOriginalWide;
+    int m_iOriginalTall;
+
 };	
 
 DECLARE_HUDELEMENT( CHudHealth );
@@ -67,6 +88,12 @@ DECLARE_HUD_MESSAGE( CHudHealth, Damage );
 CHudHealth::CHudHealth( const char *pElementName ) : CHudElement( pElementName ), CHudNumericDisplay(NULL, "HudHealth")
 {
 	SetHiddenBits( HIDEHUD_HEALTH | HIDEHUD_PLAYERDEAD | HIDEHUD_NEEDSUIT );
+
+    m_iStyle = -1;
+    m_iOriginalXPos = 0;
+    m_iOriginalYPos = 0;
+    m_iOriginalWide = 0;
+    m_iOriginalTall = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -137,6 +164,12 @@ void CHudHealth::OnThink()
 		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthIncreasedBelow20");
 		g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthLow");
 	}
+
+    // draw the progress bar
+    DrawBox( progress_xpos, progress_ypos, progress_wide, progress_tall, m_ProgressBgColor, 1.0f );
+    if ( m_iHealth > 0 )
+        DrawBox( progress_xpos, progress_ypos, progress_wide * Clamp( m_iHealth / 100.0f, 0.0f, 1.0f ), progress_tall, m_ProgressFgColor, 1.0f );
+
 
 	SetDisplayValue(m_iHealth);
 }

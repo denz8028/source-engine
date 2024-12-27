@@ -1,4 +1,4 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+﻿//========= Copyright Valve Corporation, All rights reserved. ============//
 //
 // Purpose:		Player for HL2.
 //
@@ -45,6 +45,7 @@
 #include "eventqueue.h"
 #include "gamestats.h"
 #include "filters.h"
+#include "gamemovement.h"
 #include "tier0/icommandline.h"
 
 #ifdef HL2_EPISODIC
@@ -167,8 +168,7 @@ bool Flashlight_UseLegacyVersion( void )
 		if ( UTIL_GetModDir( modDir, sizeof(modDir) ) == false )
 			return false;
 
-		g_bUseLegacyFlashlight = ( !Q_strcmp( modDir, "hl2" ) ||
-					   !Q_strcmp( modDir, "episodic" ) ||
+		g_bUseLegacyFlashlight = ( !Q_strcmp( modDir, "episodic" ) ||
 					   !Q_strcmp( modDir, "lostcoast" ) || !Q_strcmp( modDir, "hl1" ));
 
 		g_bCacheLegacyFlashlightStatus = false;
@@ -407,7 +407,7 @@ CHL2_Player::CHL2_Player()
 #else
 	CSuitPowerDevice SuitDeviceSprint( bits_SUIT_DEVICE_SPRINT, 12.5f );				// 100 units in 8 seconds
 #endif
-
+	CSuitPowerDevice SuitDeviceJump(	bits_SUIT_DEVICE_JUMP,	20.0f);
 #ifdef HL2_EPISODIC
 	CSuitPowerDevice SuitDeviceFlashlight( bits_SUIT_DEVICE_FLASHLIGHT, 1.111 );	// 100 units in 90 second
 #else
@@ -435,6 +435,7 @@ void CHL2_Player::Precache( void )
 	PrecacheScriptSound( "HL2Player.TrainUse" );
 	PrecacheScriptSound( "HL2Player.Use" );
 	PrecacheScriptSound( "HL2Player.BurnPain" );
+	PrecacheModel( "models/css_hands/c_arms_arctic.mdl" );
 }
 
 //-----------------------------------------------------------------------------
@@ -911,7 +912,7 @@ void CHL2_Player::StartAdmireGlovesAnimation( void )
 
 	if ( vm && !GetActiveWeapon() )
 	{
-		vm->SetWeaponModel( "models/weapons/v_hands.mdl", NULL );
+		vm->SetWeaponModel( "models/css_hands/c_arms_arctic.mdl", NULL );
 		ShowViewModel( true );
 						
 		int	idealSequence = vm->SelectWeightedSequence( ACT_VM_IDLE );
@@ -1112,6 +1113,7 @@ void CHL2_Player::Spawn(void)
 #ifndef HL2MP
 #ifndef PORTAL
 	SetModel( "models/player.mdl" );
+
 #endif
 #endif
 
@@ -1142,6 +1144,7 @@ void CHL2_Player::Spawn(void)
 	GetPlayerProxy();
 
 	SetFlashlightPowerDrainScale( 1.0f );
+	GetViewModel(1)->SetModel( "models/css_hands/c_arms_arctic.mdl" );
 }
 
 //-----------------------------------------------------------------------------
@@ -1188,7 +1191,13 @@ void CHL2_Player::StartAutoSprint()
 		m_fAutoSprintMinTime = gpGlobals->curtime + 1.5f;
 	}
 }
-
+void CHL2_Player::OnJump( float fImpulse ) {
+	SuitPower_AddDevice(SuitDeviceJump);
+	sleep(1);
+	if (SuitPower_IsDeviceActive(SuitDeviceJump)) {
+		SuitPower_RemoveDevice(SuitDeviceJump);
+	}
+}
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 void CHL2_Player::StartSprinting( void )
@@ -1869,7 +1878,7 @@ bool CHL2_Player::SuitPower_Drain( float flPower )
 	if ( sv_infinite_aux_power.GetBool() )
 		return true;
 
-	m_HL2Local.m_flSuitPower -= flPower;
+	m_HL2Local.m_flSuitPower -= flPower * 0.3f;
 
 	if( m_HL2Local.m_flSuitPower < 0.0 )
 	{
@@ -2037,7 +2046,9 @@ void CHL2_Player::FlashlightTurnOn( void )
 	if( !IsSuitEquipped() )
 		return;
 #endif
-
+// if ( GetActiveWeapon()->GetClassname() != "weapon_flashlight" ) {
+// 		return;
+// 	}
 	AddEffects( EF_DIMLIGHT );
 	EmitSound( "HL2Player.FlashLightOn" );
 
@@ -2045,7 +2056,12 @@ void CHL2_Player::FlashlightTurnOn( void )
 	flashlighton.SetFloat( m_HL2Local.m_flSuitPower / 100.0f );
 	FirePlayerProxyOutput( "OnFlashlightOn", flashlighton, this, this );
 }
-
+//HACK: are we holding flashlight?
+void CHL2_Player::FlashlightTurnOnCust( void ) {
+	if ((GetActiveWeapon()->GetClassname() == "weapon_flashlight")) {
+		FlashlightTurnOn();
+	}
+}
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -3258,7 +3274,7 @@ void CHL2_Player::UpdateClientData( void )
 		}
 		else
 		{
-			m_HL2Local.m_flFlashBattery += FLASH_CHARGE_TIME * gpGlobals->frametime;
+			//m_HL2Local.m_flFlashBattery += FLASH_CHARGE_TIME * gpGlobals->frametime;
 			if ( m_HL2Local.m_flFlashBattery > 100.0f )
 			{
 				m_HL2Local.m_flFlashBattery = 100.0f;

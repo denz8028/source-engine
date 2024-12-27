@@ -11,9 +11,11 @@
 #include "ammodef.h"
 #include "eventlist.h"
 #include "npcevent.h"
-
+#include "hl2_player.h"
+#include "hl2_playerlocaldata.h"
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
+#include "util.h"
 
 //---------------------------------------------------------
 // Applies ammo quantity scale.
@@ -34,7 +36,36 @@ int ITEM_GiveAmmo( CBasePlayer *pPlayer, float flCount, const char *pszAmmoName,
 
 	return pPlayer->GiveAmmo( flCount, iAmmoType, bSuppressSound );
 }
+// ========================================================================
+//	>> Batteries
+// ========================================================================
+class CItem_Batteries : public CItem {
+public:
+		DECLARE_CLASS( CItem_Batteries, CItem );
+		void Spawn( void ) {
+			Precache( );
+		SetModel( "models/items/boxmrounds.mdl");
+		BaseClass::Spawn( );
+		}
+		void Precache( void ) {
+			PrecacheModel ("models/items/boxmrounds.mdl");
+		};
+		bool MyTouch( CBasePlayer *pPlayer ) {
+			CHL2PlayerLocalData *pSt;
+			CHL2_Player *pSuit;
+			if (pSt->m_flFlashBattery < 95.0f ) {
+				pSt->m_flFlashBattery = 100.0f;
+				pSuit->m_HL2Local.m_flFlashBattery = 100.0f;
+				if ( g_pGameRules->ItemShouldRespawn( this ) == GR_ITEM_RESPAWN_NO )
+				{
+					UTIL_Remove(this);
+				}
+			}
+		return true;
 
+		};
+};
+LINK_ENTITY_TO_CLASS(item_batteries, CItem_Batteries);
 // ========================================================================
 //	>> BoxSRounds
 // ========================================================================

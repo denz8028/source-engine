@@ -44,6 +44,8 @@ def build(bld):
 		'../../public/tier1',
 		'../../vgui2/include',
 		'../../vgui2/controls',
+		'../../imgui',
+		'../../imgui/backends',
 		'../shared'
 	]
 
@@ -53,6 +55,7 @@ def build(bld):
 		'dmxloader',
 		'vgui_controls',
 		'matsys_controls',
+		'imgui',
 		'tier1',
 		'tier2',
 		'tier3',

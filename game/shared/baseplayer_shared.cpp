@@ -856,6 +856,7 @@ bool CBasePlayer::Weapon_Switch( CBaseCombatWeapon *pWeapon, int viewmodelindex 
 			pViewModel->RemoveEffects( EF_NODRAW );
 		ResetAutoaim( );
 		return true;
+
 	}
 	return false;
 }
@@ -1017,6 +1018,7 @@ bool CBasePlayer::Weapon_ShouldSelectItem( CBaseCombatWeapon *pWeapon )
 //-----------------------------------------------------------------------------
 void CBasePlayer::SelectItem( const char *pstr, int iSubType )
 {
+	CBasePlayer *pPlayer;
 	if (!pstr)
 		return;
 

@@ -249,6 +249,9 @@ $Project "Server (HL2)"
 			$File	"hl2\weapon_smg1.cpp"
 			$File	"hl2\weapon_stunstick.cpp"
 			$File	"hl2\weapon_stunstick.h"
+			$File	"hl2\weapon_smg2.cpp"
+			$File	"..\shared\handviewmodel_shared.cpp"
+			$File	"hl2\weapon_flashlight.cpp"
 
 			$Folder	"Unused"
 			{

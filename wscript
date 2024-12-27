@@ -97,6 +97,7 @@ projects={
 		'shadereditor',
 		'vgui_editor',
 		'materialsystem/procshader',
+		'imgui',
 	],
 	'tests': [
 		'appframework',

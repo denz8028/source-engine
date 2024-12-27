@@ -493,7 +493,7 @@ CBaseViewModel *CBasePlayer::GetViewModel( int index /*= 0*/, bool bObserverOK )
 //-----------------------------------------------------------------------------
 void CBasePlayer::CreateViewModel( int index /*=0*/ )
 {
-	Assert( index >= 0 && index < MAX_VIEWMODELS );
+	//Assert( index >= 0 && index < MAX_VIEWMODELS );
 
 	if ( GetViewModel( index ) )
 		return;
@@ -506,6 +506,27 @@ void CBasePlayer::CreateViewModel( int index /*=0*/ )
 		vm->SetIndex( index );
 		DispatchSpawn( vm );
 		vm->FollowEntity( this );
+		m_hViewModel.Set( index, vm );
+	}
+}
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+void CBasePlayer::CreateHandModel( int index, int iOtherVm )
+{
+	Assert( index >= 0 && index < MAX_VIEWMODELS && iOtherVm >= 0 && iOtherVm < MAX_VIEWMODELS );
+
+	if ( GetViewModel( index ) )
+		return;
+
+	CBaseViewModel *vm = (CBaseViewModel *)CreateEntityByName( "hand_viewmodel" );
+	if ( vm )
+	{
+		vm->SetAbsOrigin( GetAbsOrigin() );
+		vm->SetOwner( this );
+		vm->SetIndex( index );
+		DispatchSpawn( vm );
+		vm->FollowEntity( GetViewModel( iOtherVm ), true );
 		m_hViewModel.Set( index, vm );
 	}
 }
@@ -4993,9 +5014,8 @@ void CBasePlayer::Spawn( void )
 	
 	CSingleUserRecipientFilter user( this );
 	enginesound->SetPlayerDSP( user, 0, false );
-
 	CreateViewModel();
-
+	CreateHandModel();
 	SetCollisionGroup( COLLISION_GROUP_PLAYER );
 
 	// if the player is locked, make sure he stays locked

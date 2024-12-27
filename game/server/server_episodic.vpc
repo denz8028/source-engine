@@ -268,6 +268,8 @@ $Project "Server (Episodic)"
 			$File	"hl2\weapon_stunstick.h"
 			$File	"episodic\ep1_gamestats.h"
 			$File	"episodic\ep2_gamestats.h"
+			$File	"..\shared\handviewmodel_shared.cpp"
+			$File	"..\shared\hl2\hl2_gamemovement.cpp"
 			$File	"episodic\ep1_gamestats.cpp" \
 					"episodic\ep2_gamestats.cpp"
 			{
