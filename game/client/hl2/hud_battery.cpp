@@ -16,21 +16,27 @@
 #include "hud_macros.h"
 #include "hud_numericdisplay.h"
 #include "iclientmode.h"
+#include "c_basehlplayer.h"
 
-#include "vgui_controls/AnimationController.h"
+#include <vgui/IPanel.h>
+#include <KeyValues.h>
+#include <vgui/ISurface.h>
+#include <vgui/ISystem.h>
+#include <vgui_controls/AnimationController.h>
 #include "vgui/ILocalize.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
+#include "vgui_controls/Panel.h"
 
 #define INIT_BAT	-1
-
+using namespace vgui;
 //-----------------------------------------------------------------------------
 // Purpose: Displays suit power (armor) on hud
 //-----------------------------------------------------------------------------
-class CHudBattery : public CHudNumericDisplay, public CHudElement
+class CHudBattery : public CHudElement, public vgui::Panel
 {
-	DECLARE_CLASS_SIMPLE( CHudBattery, CHudNumericDisplay );
+	DECLARE_CLASS_SIMPLE( CHudBattery, vgui::Panel );
 
 public:
 	CHudBattery( const char *pElementName );
@@ -40,10 +46,22 @@ public:
 	void OnThink( void );
 	void MsgFunc_Battery(bf_read &msg );
 	bool ShouldDraw();
-	
+	void Paint();
+
 private:
 	int		m_iBat;	
 	int		m_iNewBat;
+	CPanelAnimationVarAliasType( float, m_flBarInsetX, "BarInsetX", "8", "proportional_float" );
+	CPanelAnimationVarAliasType( float, m_flBarInsetY, "BarInsetY", "8", "proportional_float" );
+	CPanelAnimationVarAliasType( float, m_flBarWidth, "BarWidth", "80", "proportional_float" );
+	CPanelAnimationVarAliasType( float, m_flBarHeight, "BarHeight", "10", "proportional_float" );
+	CPanelAnimationVarAliasType( float, m_flBarChunkWidth, "BarChunkWidth", "10", "proportional_float" );
+	CPanelAnimationVarAliasType( float, m_flBarChunkGap, "BarChunkGap", "2", "proportional_float" );
+	CPanelAnimationVar( Color, m_AuxPowerColor, "AuxPowerColor", "255 220 0 255" );
+	CPanelAnimationVar( int, m_iAuxPowerDisabledAlpha, "AuxPowerDisabledAlpha", "70" );
+	CPanelAnimationVar( vgui::HFont, m_hTextFont, "TextFont", "Default" );
+	CPanelAnimationVarAliasType( float, text_xpos, "text_xpos", "8", "proportional_float" );
+	CPanelAnimationVarAliasType( float, text_ypos, "text_ypos", "30", "proportional_float" );
 };
 
 DECLARE_HUDELEMENT( CHudBattery );
@@ -54,6 +72,8 @@ DECLARE_HUD_MESSAGE( CHudBattery, Battery );
 //-----------------------------------------------------------------------------
 CHudBattery::CHudBattery( const char *pElementName ) : BaseClass(NULL, "HudSuit"), CHudElement( pElementName )
 {
+	vgui::Panel *pParent = g_pClientMode->GetViewport();
+    SetParent( pParent );
 	SetHiddenBits( HIDEHUD_HEALTH | HIDEHUD_NEEDSUIT );
 }
 
@@ -73,8 +93,8 @@ void CHudBattery::Init( void )
 //-----------------------------------------------------------------------------
 void CHudBattery::Reset( void )
 {
-	SetLabelText(g_pVGuiLocalize->Find("#Valve_Hud_SUIT"));
-	SetDisplayValue(m_iBat);
+	//SetLabelText(g_pVGuiLocalize->Find("#Valve_Hud_SUIT"));
+	//SetDisplayValue(m_iBat);
 }
 
 //-----------------------------------------------------------------------------
@@ -135,9 +155,46 @@ void CHudBattery::OnThink( void )
 
 	m_iBat = m_iNewBat;
 
-	SetDisplayValue(m_iBat);
+
 }
 
+void CHudBattery::Paint()
+{
+    C_BaseHLPlayer *pPlayer = (C_BaseHLPlayer *)C_BasePlayer::GetLocalPlayer();
+    if ( !pPlayer )
+        return;
+    int chunkCount = m_flBarWidth / (m_flBarChunkWidth + m_flBarChunkGap);
+    int enabledChunks = (int)((float)chunkCount * (m_iBat * 1.0f/100.0f) + 0.5f );
+
+	// draw the suit power bar
+	surface()->DrawSetColor( m_AuxPowerColor );
+	int xpos = m_flBarInsetX, ypos = m_flBarInsetY;
+	for (int i = 0; i < enabledChunks; i++)
+	{
+		surface()->DrawFilledRect( xpos, ypos, xpos + m_flBarChunkWidth, ypos + m_flBarHeight );
+		xpos += (m_flBarChunkWidth + m_flBarChunkGap);
+	}
+	// draw the exhausted portion of the bar.
+	surface()->DrawSetColor( Color( m_AuxPowerColor[0], m_AuxPowerColor[1], m_AuxPowerColor[2], m_iAuxPowerDisabledAlpha ) );
+	for (int i = enabledChunks; i < chunkCount; i++)
+	{
+		surface()->DrawFilledRect( xpos, ypos, xpos + m_flBarChunkWidth, ypos + m_flBarHeight );
+		xpos += (m_flBarChunkWidth + m_flBarChunkGap);
+	}
+	surface()->DrawSetTextFont(m_hTextFont);
+	surface()->DrawSetTextColor(m_AuxPowerColor);
+	surface()->DrawSetTextPos(text_xpos, text_ypos);
+	wchar_t *tempString = g_pVGuiLocalize->Find("#Valve_Hud_SUIT");
+
+	if (tempString)
+	{
+		surface()->DrawPrintText(tempString, wcslen(tempString));
+	}
+	else
+	{
+		surface()->DrawPrintText(L"ARMOR", wcslen(L"ARMOR"));
+	}
+}
 //-----------------------------------------------------------------------------
 // Purpose: 
 //-----------------------------------------------------------------------------
