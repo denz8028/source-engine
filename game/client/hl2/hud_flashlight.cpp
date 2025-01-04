@@ -19,6 +19,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+
 //-----------------------------------------------------------------------------
 // Purpose: Shows the flashlight icon
 //-----------------------------------------------------------------------------
@@ -65,7 +66,7 @@ CHudFlashlight::CHudFlashlight( const char *pElementName ) : CHudElement( pEleme
 	vgui::Panel *pParent = g_pClientMode->GetViewport();
 	SetParent( pParent );
 
-	SetHiddenBits( HIDEHUD_HEALTH | HIDEHUD_PLAYERDEAD | HIDEHUD_NEEDSUIT );
+	SetHiddenBits( HIDEHUD_HEALTH | HIDEHUD_PLAYERDEAD );
 }
 
 //-----------------------------------------------------------------------------
@@ -115,7 +116,6 @@ void CHudFlashlight::Paint()
 		SetPaintBackgroundEnabled( false );
 		return;
 	}
-
 	bool bIsOn = pPlayer->IsEffectActive( EF_DIMLIGHT );
 	SetFlashlightState( bIsOn );
 

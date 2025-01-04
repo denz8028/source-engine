@@ -22,6 +22,7 @@ STUB_WEAPON_CLASS( weapon_gauss, WeaponGaussGun, C_BaseHLCombatWeapon );
 STUB_WEAPON_CLASS( weapon_cubemap, WeaponCubemap, C_BaseCombatWeapon );
 STUB_WEAPON_CLASS( weapon_alyxgun, WeaponAlyxGun, C_HLSelectFireMachineGun );
 STUB_WEAPON_CLASS( weapon_citizenpackage, WeaponCitizenPackage, C_BaseHLCombatWeapon );
+STUB_WEAPON_CLASS( weapon_cguard, WeaponCguard, C_BaseHLCombatWeapon );
 STUB_WEAPON_CLASS( weapon_citizensuitcase, WeaponCitizenSuitcase, C_WeaponCitizenPackage );
 STUB_WEAPON_CLASS( weapon_flashlight, WeaponFlashlight, C_BaseHLBludgeonWeapon );
 
