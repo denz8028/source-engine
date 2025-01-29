@@ -967,6 +967,9 @@ void CConsolePanel::OnMenuItemSelected(const char *command)
 
 void CConsolePanel::Hide()
 {
+    static ConVarRef cv_console_window_open( "console_window_open" );
+    cv_console_window_open.SetValue( false );
+
 	OnClose();
 	m_iNextCompletion = 0;
 	RebuildCompletionList("");
@@ -1199,6 +1202,9 @@ void CConsoleDialog::Activate()
 {
 	BaseClass::Activate();
 	m_pConsolePanel->m_pEntry->RequestFocus();
+
+    static ConVarRef cv_console_window_open( "console_window_open" );
+    cv_console_window_open.SetValue( true );
 }
 
 

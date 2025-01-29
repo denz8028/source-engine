@@ -126,6 +126,9 @@ bool s_bWindowsInputEnabled = true;
 ConVar r_drawvgui( "r_drawvgui", "1", FCVAR_CHEAT, "Enable the rendering of vgui panels" );
 ConVar gameui_xbox( "gameui_xbox", "0", 0 );
 
+// Tracks whether console window is open or not - true as soon as we receive the request to open it, until after it has shutdown
+ConVar cv_console_window_open( "console_window_open", NULL, FCVAR_HIDDEN, "Is the console window active" );
+
 void Con_CreateConsolePanel( vgui::Panel *parent );
 void CL_CreateEntityReportPanel( vgui::Panel *parent );
 void ClearIOStates( void );
@@ -806,7 +809,7 @@ void CEngineVGui::Init()
 	if ( staticGameConsole )
 	{
 		staticGameConsole->Initialize();
-		staticGameConsole->SetParent(staticGameUIPanel->GetVPanel());
+		//staticGameConsole->SetParent(staticGameUIPanel->GetVPanel());
 	}
 
 	if ( IsX360() )
@@ -1135,7 +1138,7 @@ void CEngineVGui::ShowConsole()
 	if ( IsX360() )
 		return;
 
-	ActivateGameUI();
+	//ActivateGameUI();
 
 	if ( staticGameConsole )
 	{
@@ -1150,7 +1153,7 @@ bool CEngineVGui::IsConsoleVisible()
 {
 	if ( IsPC() )
 	{
-		return IsGameUIVisible() && staticGameConsole && staticGameConsole->IsConsoleVisible();
+		return staticGameConsole && staticGameConsole->IsConsoleVisible();
 	}
 	else
 	{
@@ -1577,7 +1580,11 @@ bool CEngineVGui::Key_Event( const InputEvent_t &event )
 	{
 		if ( IsPC() )
 		{
-			if ( IsGameUIVisible()  )
+            if ( cv_console_window_open.GetBool() )
+            {
+                HideConsole();
+            }
+            else if ( IsGameUIVisible() )
 			{
 				// Don't allow hiding of the game ui if there's no level
 				const char *pLevelName = engineClient->GetLevelName();
@@ -1865,7 +1872,6 @@ void CEngineVGui::NotifyOfServerDisconnect()
 	staticGameUIFuncs->OnDisconnectFromServer( g_eSteamLoginFailure );
 	g_eSteamLoginFailure = 0;
 }
-
 //-----------------------------------------------------------------------------
 // Xbox 360: Matchmaking sessions send progress notifications to GameUI
 //-----------------------------------------------------------------------------

@@ -2006,7 +2006,12 @@ void CBasePanel::OnGameUIActivated()
 	{
 		if ( !m_bUseMatchmaking )
 		{
-			OnCommand( "OpenPauseMenu" );
+            // Decouple the pause menu from the console - don't pause just because we're opening the console window
+            static ConVarRef cv_console_window_open( "console_window_open" );
+            if ( !IsPC() || !cv_console_window_open.GetBool() )
+            {
+                OnCommand( "OpenPauseMenu" );
+            }
 		}
  		else
 		{
