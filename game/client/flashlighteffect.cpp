@@ -52,7 +52,7 @@ static ConVar mat_slopescaledepthbias_shadowmap( "mat_slopescaledepthbias_shadow
 static ConVar mat_depthbias_shadowmap(	"mat_depthbias_shadowmap", "0.0005", FCVAR_CHEAT  );
 
 ConVar r_flashlightlag("r_flashlightlag", "1", 0);
-ConVar r_flashlightlag_amount("r_flashlightlag_amount", "0.01", 0);
+ConVar r_flashlightlag_amount("r_flashlightlag_amount", "0.0001", FCVAR_ARCHIVE);
 
 void r_newflashlightCallback_f( IConVar *pConVar, const char *pOldString, float flOldValue )
 {

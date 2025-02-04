@@ -3308,7 +3308,7 @@ extern ConVar muzzleflash_light;
 void C_BaseAnimating::ProcessMuzzleFlashEvent()
 {
 	// If we have an attachment, then stick a light on it.
-	if ( muzzleflash_light.GetBool() )
+	if ( muzzleflash_light.GetInt() == 2 )
 	{
 		//FIXME: We should really use a named attachment for this
 		if ( m_Attachments.Count() > 0 )
@@ -3327,21 +3327,24 @@ void C_BaseAnimating::ProcessMuzzleFlashEvent()
 			dl->die = gpGlobals->curtime + 0.05f;
 			dl->radius = random->RandomFloat(245.0f, 256.0f);
 			dl->decay = 512.0f;
+		}
+		else if ( muzzleflash_light.GetInt() == 1 )
+		{
 
-			// Vector vAttachment;
-			// QAngle dummyAngles;
-			// GetAttachment( 1, vAttachment, dummyAngles );
-   //
-			// // Make an elight
-			// dlight_t *el = effects->CL_AllocElight( LIGHT_INDEX_MUZZLEFLASH + index );
-			// el->origin = vAttachment;
-			// el->radius = random->RandomInt( 32, 64 );
-			// el->decay = el->radius / 0.05f;
-			// el->die = gpGlobals->curtime + 0.05f;
-			// el->color.r = 255;
-			// el->color.g = 192;
-			// el->color.b = 64;
-			// el->color.exponent = 5;
+			Vector vAttachment;
+			QAngle dummyAngles;
+			GetAttachment( 1, vAttachment, dummyAngles );
+
+			// Make an elight
+			dlight_t *el = effects->CL_AllocElight( LIGHT_INDEX_MUZZLEFLASH + index );
+			el->origin = vAttachment;
+			el->radius = random->RandomInt( 32, 64 );
+			el->decay = el->radius / 0.05f;
+			el->die = gpGlobals->curtime + 0.05f;
+			el->color.r = 255;
+			el->color.g = 192;
+			el->color.b = 64;
+			el->color.exponent = 5;
 		}
 	}
 }
