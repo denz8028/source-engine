@@ -56,7 +56,7 @@ $LoadAddressMacroAuto LOADADDRESS_DEVELOPMENT	0x82200000 [$X360]
 	SoundEmitterSystem		2.0
 	SceneFileCache			1.5
 	vgui_dll				2.5
-	gameui					6.0
+	game.client.gameui					6.0
 
 	materialsystem			5.0
 	vguimatsurface			4.0
@@ -89,7 +89,7 @@ $LoadAddressMacroAuto LOADADDRESS_RETAIL 0x82200000 [$X360]
 	SoundEmitterSystem		1.0
 	SceneFileCache			1.0
 	vgui_dll				1.0
-	gameui					2.0
+	game.client.gameui					2.0
 
 	materialsystem			1.5
 	vguimatsurface			1.5

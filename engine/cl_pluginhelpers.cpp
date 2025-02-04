@@ -115,7 +115,7 @@ void CPluginMenu::OnCommand( const char *command )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Displays the gameui portion of plugin menus
+// Purpose: Displays the game.client.gameui portion of plugin menus
 //-----------------------------------------------------------------------------
 class CPluginGameUIDialog : public vgui::Frame
 {
@@ -229,7 +229,7 @@ void CPluginGameUIDialog::Show( DIALOG_TYPE type, KeyValues *kv )
 		m_RichText->SetText( kv->GetWString( "msg" ) );
 		m_RichText->SetVisible( true );
 		break;
-	case DIALOG_MSG: // just a msg to the screen, don't display in the gameui
+	case DIALOG_MSG: // just a msg to the screen, don't display in the game.client.gameui
 		SetVisible( false );
 		return;
 		break;
@@ -583,7 +583,7 @@ void CPluginUIManager::Show( DIALOG_TYPE type, KeyValues *kv )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: called when the gameui panel is closed
+// Purpose: called when the game.client.gameui panel is closed
 //-----------------------------------------------------------------------------
 void CPluginUIManager::OnPanelClosed()
 {

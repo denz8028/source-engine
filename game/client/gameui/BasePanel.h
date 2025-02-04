@@ -18,6 +18,9 @@
 #include "KeyValues.h"
 #include "utlvector.h"
 #include "tier1/CommandBuffer.h"
+#include "tier2/camerautils.h"
+#include "tier3/mdlutils.h"
+#include "materialsystem/MaterialSystemUtil.h"
 
 #include "ixboxsystem.h"
 
@@ -119,7 +122,7 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// Purpose: EditablePanel that can replace the GameMenuButtons in CBasePanel
+// Purpose: EditablePanel that can replace the GameMenuButtons in CBaseModPanel
 //-----------------------------------------------------------------------------
 class CMainMenuGameLogo : public vgui::EditablePanel
 {
@@ -155,17 +158,58 @@ private:
 	bool		m_bRightAligned;
 };
 
+#define MATERIAL_MAX_LIGHT_COUNT 4
+class CBaseModPlayerPanel: public vgui::Panel
+{
+    DECLARE_CLASS_SIMPLE( CBaseModPlayerPanel, vgui::Panel );
+public:
+    CBaseModPlayerPanel( Panel* parent, const char* panelName );
+    virtual ~CBaseModPlayerPanel();
+public:
+    virtual void Paint();
+    virtual void OnThink();
+    virtual void ApplySettings( KeyValues* inResourceData );
+    virtual void OnMousePressed( vgui::MouseCode code );
+    virtual void OnMouseReleased( vgui::MouseCode code );
+    virtual void OnCursorMoved( int x, int y );
+    virtual void OnCursorExited();
+    void SetupRenderState( int nDisplayWidth, int nDisplayHeight );
+    void ParseLightInfo( KeyValues* inResourceData );
+    void OnPaint3D();
+    void SetMDL( const char* pMDLName );
+    CMDL *SetMergeMDL( const char* pMDLName );
+    void ClearMergeMDLs();
+    bool SetBodygroup( const char* pBodygroupName, int nValue );
+    void PlaySequence( const char* pszSequenceName );
+private:
+    Camera_t m_Camera;
+    Vector4D m_vecAmbientCube[6];
+    LightDesc_t m_pLightDesc[MATERIAL_MAX_LIGHT_COUNT];
+    CMDL m_MDL;
+    CUtlVector<CMDL> m_aMergeMDLs;
+    matrix3x4_t	m_MDLToWorld;
+    CTextureReference m_DefaultEnvCubemap;
+    QAngle m_angPlayerModel;
+    int m_nNumLightDescs;
+    int m_nLastMouseX;
+    int m_nLastMouseY;
+    float m_flRotationAngleLeft;
+    float m_flRotationTimeLeft;
+    bool m_bMousePressed;
+};
+
+
 //-----------------------------------------------------------------------------
 // Purpose: This is the panel at the top of the panel hierarchy for GameUI
 //			It handles all the menus, background images, and loading dialogs
 //-----------------------------------------------------------------------------
-class CBasePanel : public vgui::Panel
+class CBaseModPanel : public vgui::EditablePanel
 {
-	DECLARE_CLASS_SIMPLE( CBasePanel, vgui::Panel );
+	DECLARE_CLASS_SIMPLE( CBaseModPanel, vgui::EditablePanel );
 
 public:
-	CBasePanel();
-	virtual ~CBasePanel();
+	CBaseModPanel();
+	virtual ~CBaseModPanel();
 
 public:
 	//
@@ -281,15 +325,14 @@ public:
 	bool IsWaitingForConsoleUI( void ) { return m_bWaitingForStorageDeviceHandle || m_bWaitingForUserSignIn || m_bXUIVisible; }
 
 #if defined( _X360 )
-	CON_COMMAND_MEMBER_F( CBasePanel, "gameui_reload_resources", Reload_Resources, "Reload the Xbox 360 UI res files", 0 );
+	CON_COMMAND_MEMBER_F( CBaseModPanel, "gameui_reload_resources", Reload_Resources, "Reload the Xbox 360 UI res files", 0 );
 #endif
 
 	int  GetMenuAlpha( void );
 
 	void SetMainMenuOverride( vgui::VPANEL panel );
 
-
-
+    void UpdateMenuModel();
 protected:
 	virtual void PaintBackground();
 	virtual void ApplySchemeSettings(vgui::IScheme *pScheme);
@@ -448,7 +491,7 @@ private:
 	// fading to game
 	MESSAGE_FUNC_CHARPTR( RunEngineCommand, "RunEngineCommand", command );
 	MESSAGE_FUNC( FinishDialogClose, "FinishDialogClose" );
-
+    CBaseModPlayerPanel* m_pPlayerModel;
 public:
 	MESSAGE_FUNC_CHARPTR( RunMenuCommand, "RunMenuCommand", command );
 };
@@ -456,7 +499,7 @@ public:
 //-----------------------------------------------------------------------------
 // Purpose: singleton accessor
 //-----------------------------------------------------------------------------
-extern CBasePanel *BasePanel();
+extern CBaseModPanel *BasePanel();
 
 
 #endif // BASEPANEL_H

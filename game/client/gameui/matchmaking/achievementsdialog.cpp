@@ -950,7 +950,7 @@ CAchievementDialogItemPanel::~CAchievementDialogItemPanel()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Updates displayed achievement data. In applyschemesettings, and when gameui activates.
+// Purpose: Updates displayed achievement data. In applyschemesettings, and when game.client.gameui activates.
 //-----------------------------------------------------------------------------
 void CAchievementDialogItemPanel::UpdateAchievementInfo( IScheme* pScheme )
 {

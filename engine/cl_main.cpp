@@ -2538,7 +2538,7 @@ void CL_DemoTransitionFromTestChmb()
 
 
 //-----------------------------------------------------------------------------
-// Purpose: make the gameui appear after a certain interval
+// Purpose: make the game.client.gameui appear after a certain interval
 //----------------------------------------------------------------------------
 void V_RenderVGuiOnly();
 bool V_CheckGamma();

@@ -1522,8 +1522,8 @@ void InitStartupScreen()
 	bool bIsWidescreen = aspectRatio >= 1.5999f;
 #endif
 
-	// NOTE: Brutal hackery, this code is duplicated in gameui.dll
-	// but I have to do this prior to gameui being loaded.
+	// NOTE: Brutal hackery, this code is duplicated in game.client.gameui.dll
+	// but I have to do this prior to game.client.gameui being loaded.
 	// 360 uses hi-res game specific backgrounds
 	char gameName[MAX_PATH];
 	char filename[MAX_PATH];

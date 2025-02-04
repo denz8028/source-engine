@@ -954,7 +954,7 @@ void DeveloperChangeCallback( IConVar *pConVar, const char *pOldString, float fl
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: factory comglomerator, gets the client, server, and gameui dlls together
+// Purpose: factory comglomerator, gets the client, server, and game.client.gameui dlls together
 //-----------------------------------------------------------------------------
 void *GameFactory( const char *pName, int *pReturnCode )
 {
@@ -974,7 +974,7 @@ void *GameFactory( const char *pName, int *pReturnCode )
 			return pRetVal;
 	}
 
-	// gameui.dll
+	// game.client.gameui.dll
 	if (EngineVGui()->GetGameUIFactory())
 	{
 		pRetVal = EngineVGui()->GetGameUIFactory()( pName, pReturnCode );

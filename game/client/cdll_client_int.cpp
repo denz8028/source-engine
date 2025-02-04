@@ -346,7 +346,7 @@ class IClientPurchaseInterfaceV2 *g_pClientPurchaseInterface = (class IClientPur
 static ConVar *g_pcv_ThreadMode = NULL;
 
 //-----------------------------------------------------------------------------
-// Purpose: interface for gameui to modify voice bans
+// Purpose: interface for game.client.gameui to modify voice bans
 //-----------------------------------------------------------------------------
 class CGameClientExports : public IGameClientExports
 {

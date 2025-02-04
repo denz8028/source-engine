@@ -1521,7 +1521,7 @@ void CEngineClient::SetMostRecentSaveGame( const char *lpszFilename )
 }
 
 //-----------------------------------------------------------------------------
-// Called by gameui to hint the engine that an exiting process has started.
+// Called by game.client.gameui to hint the engine that an exiting process has started.
 // The Engine needs to stabilize to a safe quiet state. More frames are going
 // to and have to run, but the true exit will occur.
 //-----------------------------------------------------------------------------

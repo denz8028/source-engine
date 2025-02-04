@@ -25,7 +25,7 @@ public:
 	virtual void MutePlayerGameVoice(int playerIndex) = 0;
 	virtual void UnmutePlayerGameVoice(int playerIndex) = 0;
 
-	// notification of gameui state changes
+	// notification of game.client.gameui state changes
 	virtual void OnGameUIActivated() = 0;
 	virtual void OnGameUIHidden() = 0;
 #endif

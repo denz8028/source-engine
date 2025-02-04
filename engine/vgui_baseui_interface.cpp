@@ -55,7 +55,7 @@
 #include "cl_main.h" // CL_IsHL2Demo()
 #include "cl_steamauth.h"
 
-// interface to gameui dll
+// interface to game.client.gameui dll
 #include <GameUI/IGameUI.h>
 #include <GameUI/IGameConsole.h>
 
@@ -565,15 +565,27 @@ bool CEngineVGui::SetVGUIDirectories()
 //-----------------------------------------------------------------------------
 void CEngineVGui::Init()
 {
-	COM_TimestampedLog( "Loading gameui.dll" );
+    const char *szDllName = "";
 
-	// load the GameUI dll
-	const char *szDllName = "GameUI";
-	m_hStaticGameUIModule = g_pFileSystem->LoadModule(szDllName, "EXECUTABLE_PATH", true); // LoadModule() does a GetLocalCopy() call
-	m_GameUIFactory = Sys_GetFactory(m_hStaticGameUIModule);
-	if ( !m_GameUIFactory )
-	{
-		Error( "Could not load: %s\n", szDllName );
+    if ( CommandLine()->FindParm( "-gameuidll" ) )
+    {
+        COM_TimestampedLog( "Loading gameui.dll" );
+
+        // load the GameUI dll
+        szDllName = "gameui";
+        m_hStaticGameUIModule = g_pFileSystem->LoadModule(szDllName, "GAMEBIN", true); // LoadModule() does a GetLocalCopy() call
+        m_GameUIFactory = Sys_GetFactory(m_hStaticGameUIModule);
+        if ( !m_GameUIFactory )
+        {
+            Error( "Could not load: %s\n", szDllName );
+        }
+    }
+    else
+    {
+        // Get the gameui interfaces from client.dll
+        extern CreateInterfaceFn g_ClientFactory;
+        m_GameUIFactory = g_ClientFactory;
+        szDllName = "client";
 	}
 	
 	// get the initialization func
@@ -843,7 +855,7 @@ void CEngineVGui::PostInit()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: connects interfaces in gameui
+// Purpose: connects interfaces in game.client.gameui
 //-----------------------------------------------------------------------------
 void CEngineVGui::Connect()
 {

@@ -48,7 +48,7 @@ public:
 	virtual void Initialize( CreateInterfaceFn appFactory ) = 0;
 	virtual void PostInit() = 0;
 
-	// connect to other interfaces at the same level (gameui.dll/server.dll/client.dll)
+	// connect to other interfaces at the same level (game.client.gameui.dll/server.dll/client.dll)
 	virtual void Connect( CreateInterfaceFn gameFactory ) = 0;
 
 	virtual void Start() = 0;

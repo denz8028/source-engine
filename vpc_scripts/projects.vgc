@@ -301,7 +301,7 @@ $Project "gamestats_reader"
 
 $Project "GameUI"
 {
-	"gameui\GameUI.vpc" [$WINDOWS||$X360||$POSIX]
+	"game.client.gameui\GameUI.vpc" [$WINDOWS||$X360||$POSIX]
 }
 
 $Project "game_shader_generic_advanced"

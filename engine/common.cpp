@@ -841,7 +841,7 @@ const char *COM_GetModDirectory()
 /*
 ================
 Return if we should load content from the _hd folder for this mod
-This logic needs to match with the gameui/OptionsSubVideo.cpp code
+This logic needs to match with the game.client.gameui/OptionsSubVideo.cpp code
 ================
 */
 bool BLoadHDContent( const char *pchModDir, const char *pchBaseDir )

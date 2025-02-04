@@ -642,7 +642,7 @@ void CAchievementsPageItemPanel::ToggleShowOnHUDButton()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Updates displayed achievement data. In applyschemesettings, and when gameui activates.
+// Purpose: Updates displayed achievement data. In applyschemesettings, and when game.client.gameui activates.
 //-----------------------------------------------------------------------------
 void CAchievementsPageItemPanel::UpdateAchievementInfo( vgui::IScheme* pScheme )
 {
@@ -862,7 +862,7 @@ void CAchievementsPageGroupPanel::ApplySchemeSettings( vgui::IScheme* pScheme )
 
 //-----------------------------------------------------------------------------
 // Purpose: Updates displayed achievement data. In ApplySchemeSettings(), and
-//          when gameui activates.
+//          when game.client.gameui activates.
 //-----------------------------------------------------------------------------
 void CAchievementsPageGroupPanel::UpdateAchievementInfo( vgui::IScheme* pScheme )
 {

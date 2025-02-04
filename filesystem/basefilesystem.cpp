@@ -496,7 +496,7 @@ void CBaseFileSystem::Shutdown()
 			fprintf( m_pLogFile, "copy \"%%binsrc%%\\bin\\studiorender.dll\" \"%%fs_target%%\\bin\"\n" );
 			fprintf( m_pLogFile, "copy \"%%binsrc%%\\bin\\vaudio_miles.dll\" \"%%fs_target%%\\bin\"\n" );
 			fprintf( m_pLogFile, "copy \"%%binsrc%%\\hl2\\resource\\*.ttf\" \"%%fs_target%%\\hl2\\resource\"\n" );
-			fprintf( m_pLogFile, "copy \"%%binsrc%%\\hl2\\bin\\gameui.dll\" \"%%fs_target%%\\hl2\\bin\"\n" );
+			fprintf( m_pLogFile, "copy \"%%binsrc%%\\hl2\\bin\\game.client.gameui.dll\" \"%%fs_target%%\\hl2\\bin\"\n" );
 		}
 		fprintf( m_pLogFile, "goto done\n" );
 		fprintf( m_pLogFile, ":error\n" );

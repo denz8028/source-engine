@@ -3686,7 +3686,7 @@ SOURCE=..\public\gametrace.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gameui\GameUI_Interface.h
+SOURCE=..\game.client.gameui\GameUI_Interface.h
 # End Source File
 # Begin Source File
 

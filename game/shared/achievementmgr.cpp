@@ -1655,7 +1655,7 @@ void CAchievementMgr::OnMapEvent( const char *pchEventName )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Returns an achievement as it's abstract object. This interface is used by gameui.dll for getting achievement info.
+// Purpose: Returns an achievement as it's abstract object. This interface is used by game.client.gameui.dll for getting achievement info.
 // Input  : index - 
 // Output : IBaseAchievement*
 //-----------------------------------------------------------------------------
@@ -1666,7 +1666,7 @@ IAchievement* CAchievementMgr::GetAchievementByIndex( int index )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Returns total achievement count. This interface is used by gameui.dll for getting achievement info.
+// Purpose: Returns total achievement count. This interface is used by game.client.gameui.dll for getting achievement info.
 // Input  :  - 
 // Output : Count of achievements in manager's vector.
 //-----------------------------------------------------------------------------

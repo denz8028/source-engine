@@ -11,7 +11,7 @@ XBOX 360 MANDATORY BASE 0x82000000-0x8BFFFFFF, (1MB blocks)
 ADD EACH XBOX 360 PORTED DLL HERE
 /////////////////////////////////////
 engine.360.dll			0x83000000	(16)
-gameui.360.dll			0x84100000	(5)
+game.client.gameui.360.dll			0x84100000	(5)
 client.360.dll			0x84700000	(?)
 server.360.dll			0x86000000	(?)
 

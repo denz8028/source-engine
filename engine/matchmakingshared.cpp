@@ -1724,7 +1724,7 @@ bool CMatchmaking::ProcessCheckpoint( MM_Checkpoint *pMsg )
 
 		if ( m_Session.IsArbitrated() )
 		{
-			// Tell gameui to return to the main menu
+			// Tell game.client.gameui to return to the main menu
 			SessionNotification( SESSION_NOTIFY_ENDGAME_RANKED );
 
 			SwitchToState( MMSTATE_INITIAL );
@@ -1738,7 +1738,7 @@ bool CMatchmaking::ProcessCheckpoint( MM_Checkpoint *pMsg )
 				UpdateSessionReplyData( XNET_QOS_LISTEN_ENABLE|XNET_QOS_LISTEN_SET_DATA );
 			}
 
-			// Tell gameui to activate the lobby
+			// Tell game.client.gameui to activate the lobby
 			SessionNotification( m_Session.IsHost() ? SESSION_NOTIFY_ENDGAME_HOST : SESSION_NOTIFY_ENDGAME_CLIENT );
 
 			// Fill the lobby with all of the clients

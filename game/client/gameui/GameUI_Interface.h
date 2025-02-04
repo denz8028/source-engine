@@ -111,7 +111,7 @@ public:
 	void ShowLoadingBackgroundDialog();
 	void HideLoadingBackgroundDialog();
 	bool HasLoadingBackgroundDialog();
-
+    void UpdateMenuModel( void );
 private:
 	void SendConnectedToGameMessage();
 

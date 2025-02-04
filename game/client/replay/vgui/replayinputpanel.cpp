@@ -188,7 +188,7 @@ void CReplayInputPanel::OnCommand( const char *command )
 
 		// This logic is perhaps a smidge of a hack.  We have to be careful about executing "gameui_hide"
 		// since it will hide the item pickup panel.  If there are no items to be picked up, we can safely
-		// hide the gameui panel, but we have to call CheckForRoomAndForceDiscard() (as ShowItemsPickedUp()
+		// hide the game.client.gameui panel, but we have to call CheckForRoomAndForceDiscard() (as ShowItemsPickedUp()
 		// does if no items are picked up).  Otherwise, skip the "gameui_hide" call and show the item pickup
 		// panel.
 #if defined( TF_CLIENT_DLL )

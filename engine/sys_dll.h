@@ -38,7 +38,7 @@ typedef unsigned short AVIHandle_t;
 // including the material system, vgui, vgui surface, the file system.
 extern CreateInterfaceFn g_AppSystemFactory;
 
-// this factory connect the AppSystemFactory + client.dll + gameui.dll
+// this factory connect the AppSystemFactory + client.dll + game.client.gameui.dll
 extern CreateInterfaceFn g_GameSystemFactory;
 
 

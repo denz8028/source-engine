@@ -46,7 +46,8 @@ def build(bld):
 		'../../vgui2/controls',
 		'../../imgui',
 		'../../imgui/backends',
-		'../shared'
+		'../shared',
+		'../../thirdparty'
 	]
 
 	libs = [
@@ -65,6 +66,9 @@ def build(bld):
 		'steam_api',
 		'bitmap',
 		'vtf',
+		'JPEG',
+		'PNG',
+		'SDL2',
 		'RT',
 		'ZLIB'
 	]
